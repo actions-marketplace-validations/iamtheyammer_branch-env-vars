@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - name: Print environment variables before action test
         run: |
@@ -31,7 +31,7 @@ jobs:
             !default:default-value
           TESTVAR4: |
             # yes, I know this is unsupported!
-            
+
             *:wildcard-value
             !default:default-value
           TESTVAR5: |
@@ -42,13 +42,14 @@ jobs:
           env
 
       - name: Get Node.js version from .nvmrc
+        id: get-node-version
         run: |
-          echo "name=PROJECT_NODE_VERSION=$(cat $GITHUB_WORKSPACE/.nvmrc)" >> $GITHUB_ENV
+          echo "PROJECT_NODE_VERSION=$(cat $GITHUB_WORKSPACE/.nvmrc)" >> $GITHUB_OUTPUT
 
-      - name: Setup Node.js version ${{ env.PROJECT_NODE_VERSION }}
-        uses: actions/setup-node@v2.1.0
+      - name: Setup Node.js version ${{ steps.get-node-version.outputs.PROJECT_NODE_VERSION }}
+        uses: actions/setup-node@v6
         with:
-          node-version: ${{ env.PROJECT_NODE_VERSION }}
+          node-version: ${{ steps.get-node-version.outputs.PROJECT_NODE_VERSION }}
 
       - name: Install dependencies
         run: |
