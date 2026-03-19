@@ -2,4 +2,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  moduleNameMapper: {
+    '^@actions/core$': '<rootDir>/__mocks__/@actions/core.js',
+  },
 };

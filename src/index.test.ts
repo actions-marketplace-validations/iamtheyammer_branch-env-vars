@@ -1,21 +1,17 @@
 import {
   branchEnvVars,
+  getValueForBranch,
   parseBranchName,
   parseEnvVarPossibilities,
-  getValueForBranch,
 } from "./index";
 
-import {
-  setFailed as unMockedSetFailed,
-  exportVariable as unMockedExportVariable,
-  getInput as unMockedGetInput,
-} from "@actions/core";
-
-const setFailed = jest.mocked(unMockedSetFailed, true);
-const exportVariable = jest.mocked(unMockedExportVariable, true);
-const getInput = jest.mocked(unMockedGetInput, true);
+import * as core from "@actions/core";
 
 jest.mock("@actions/core");
+
+const setFailed = jest.mocked(core.setFailed);
+const exportVariable = jest.mocked(core.exportVariable);
+const getInput = jest.mocked(core.getInput);
 
 describe("parseBranchName", () => {
   test("empty input", () => {
@@ -253,7 +249,7 @@ describe("getValueForBranch", () => {
         INPUT_TESTENVVAR: `
       !pr>pull/*:pull-branch-value
       master/*:master-value
-      
+
 
       !default:default-value
 `,
